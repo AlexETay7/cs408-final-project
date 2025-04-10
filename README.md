@@ -63,6 +63,4 @@ Overall, I think this is a solid project to build, and hopefully something that 
 
 ## Project Wireframe
 
-TODO: Replace the wireframe below with your own design.
-
-![wireframe](wireframe-example.png)
+![wireframe](wireframe-CampusCart.PNG)
