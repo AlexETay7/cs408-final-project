@@ -1,4 +1,4 @@
-# Web Dev Starter Code
+# 408 Final Project - CampusCart
 
 ## Project Spec
 
