@@ -49,7 +49,7 @@ export default function Home() {
 
         {/* typewriter effect with fixed height container */}
         <div className="h-16 mb-6">
-          <p className="text-gray-600 text-lg">
+          <div className="text-gray-600 text-lg">
             <span>
               {
                 "Buy and sell anything you need for college life — from textbooks to "
@@ -73,7 +73,7 @@ export default function Home() {
               deleteSpeed={110}
               cursorChar={"_"}
             />
-          </p>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
