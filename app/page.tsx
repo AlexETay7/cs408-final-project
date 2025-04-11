@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import ScrambleHover from "@/fancy/components/text/scramble-hover";
 import Typewriter from "@/fancy/components/text/typewriter";
+import Link from "next/link";
 
 export default function Home() {
   const items = [
@@ -77,15 +78,11 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button className="w-full sm:w-auto transition-shadow hover:shadow-[0_0_10px_rgba(37,99,235,0.6)]">
-            Browse Listings
-          </Button>
-          <Button
-            variant="outline"
-            className="w-full sm:w-auto transition-shadow hover:shadow-[0_0_10px_rgba(37,99,235,0.6)]"
-          >
-            Post an Item
-          </Button>
+          <Link href="/listings">
+            <Button className="w-full sm:w-auto transition-shadow hover:shadow-[0_0_10px_rgba(37,99,235,0.6)]">
+              Explore Listings
+            </Button>
+          </Link>
         </div>
       </div>
 
