@@ -1,5 +1,3 @@
-// components/ui/listing-card.tsx
-
 import { CalendarIcon, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -55,7 +53,7 @@ export default function ListingCard({
       <HoverCardContent className="w-90 bg-gray-500 text-white">
         <div className="flex justify-between space-x-4">
           <Avatar>
-            <AvatarImage src="/graduation-hat.png" />
+            <AvatarImage src="/home/graduation-hat.png" />
             <AvatarFallback>CC</AvatarFallback>
           </Avatar>
           <div className="space-y-1">

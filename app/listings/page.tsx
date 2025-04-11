@@ -23,6 +23,8 @@ import {
 import { MyDropdown } from "@/components/ui/my-dropdown";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import Footer from "@/components/ui/footer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const mockListings = [
   {
@@ -86,13 +88,22 @@ export default function ListingsPage() {
 
   return (
     <div className="max-w-6xl mx-auto mt-16 px-4">
+      {/* logo */}
+      <div className="absolute top-4 right-4">
+        <Link href="/">
+          <Avatar>
+            <AvatarImage src="graduation-hat.png" alt="User Avatar" />
+            <AvatarFallback>CC</AvatarFallback>
+          </Avatar>
+        </Link>
+      </div>
       <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
         {/* LEFT: Breadcrumb + Search */}
         <div className="flex items-center gap-4 flex-wrap">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                <BreadcrumbLink href="/home">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -139,6 +150,7 @@ export default function ListingsPage() {
           />
         ))}
       </div>
+      <Footer></Footer>
     </div>
   );
 }
