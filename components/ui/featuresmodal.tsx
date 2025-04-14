@@ -44,9 +44,7 @@ export default function FeaturesModal() {
           We are continuously adding more features to enhance the user
           experience, so stay tuned for future updates!
         </p>
-        <p className="italic text-sm text-right">
-          — <span className="font-semibold">CampusCart Team (1 man team)</span>
-        </p>
+        <p className="italic text-sm text-right">— Alex T</p>
       </DialogContent>
     </Dialog>
   );

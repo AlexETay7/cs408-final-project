@@ -22,9 +22,9 @@ export function MyDropdown() {
   const [showPanel, setShowPanel] = React.useState<Checked>(false);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">
+        <Button className="focus-visible:ring-0" variant="outline">
           <ChevronDown />
           Filter Listings
         </Button>

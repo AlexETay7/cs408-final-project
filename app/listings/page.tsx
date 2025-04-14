@@ -11,7 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Plus, Search } from "lucide-react";
+import { Archive, Plus, Search } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,10 +21,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MyDropdown } from "@/components/ui/my-dropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import Footer from "@/components/ui/footer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ListingDropdown } from "@/components/ui/listing-dropdown";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const mockListings = [
   {
@@ -127,12 +134,7 @@ export default function ListingsPage() {
         {/* RIGHT: Dropdown + Create button */}
         <div className="flex items-center gap-4 flex-wrap">
           <MyDropdown />
-          <Link href="/post">
-            <Button className="transition-shadow hover:shadow-[0_0_10px_rgba(37,99,235,0.6)]">
-              <Plus />
-              Create New Listing
-            </Button>
-          </Link>
+          <ListingDropdown />
         </div>
       </div>
 
@@ -151,6 +153,23 @@ export default function ListingsPage() {
         ))}
       </div>
       <Footer></Footer>
+      <div className="fixed bottom-4 right-8 z-50">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="/my-listings">
+                <Button
+                  size="icon"
+                  className="bg-blue-400 text-white hover:bg-blue-500 h-14 w-14 rounded-full"
+                >
+                  <Archive />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="left">My Listings</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </div>
   );
 }

@@ -31,8 +31,9 @@ export default function PrivacyModal() {
         <p>
           We only collect necessary information to provide our services, such as
           your <span className="font-semibold">name</span> (the one you provide,
-          it may not be your real name), contact information, and other relevant
-          details needed to facilitate the buying and selling process.
+          it may not be your real name),{" "}
+          <span className="font-semibold">contact information</span>, and other
+          relevant details needed to facilitate the buying and selling process.
         </p>
         <p>
           Your data will <span className="font-semibold">not</span> be shared
@@ -41,7 +42,7 @@ export default function PrivacyModal() {
           and we take steps to ensure its safety.
         </p>
         <p className="italic text-sm text-right">
-          — <span>CampusCart Team (1 man team)</span>
+          — <span>Alex T</span>
         </p>
       </DialogContent>
     </Dialog>
