@@ -166,7 +166,12 @@ export default function ListingsPage() {
                 </Button>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="left">My Listings</TooltipContent>
+            <TooltipContent
+              side="left"
+              className="bg-white text-black border border-gray-300 shadow-md"
+            >
+              My Listings
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
