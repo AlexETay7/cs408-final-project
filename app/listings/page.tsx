@@ -153,7 +153,7 @@ export default function ListingsPage() {
         ))}
       </div>
       <Footer></Footer>
-      <div className="fixed bottom-4 right-8 z-50">
+      <div className="fixed bottom-4 right-8 z-50 transform hover:scale-110 hover:text-foreground transition-all duration-200">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
