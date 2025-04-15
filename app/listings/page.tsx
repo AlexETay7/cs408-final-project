@@ -131,7 +131,6 @@ export default function ListingsPage() {
           </Button> */}
         </div>
 
-        {/* RIGHT: Dropdown + Create button */}
         <div className="flex items-center gap-4 flex-wrap">
           <MyDropdown />
           <ListingDropdown />

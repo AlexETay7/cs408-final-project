@@ -38,19 +38,11 @@ export function ListingDropdown() {
   const [isModalOpen, setIsModalOpen] = React.useState(false); // Manage the modal state
   const [prefillCategory, setPrefillCategory] = React.useState<string | null>(
     null
-  ); // Track the selected category to pre-fill
-
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
+  ); // track the selected category to pre-fill
 
   const openModalWithCategory = (category: string) => {
-    setPrefillCategory(category); // Set the selected category to pre-fill
-    setIsModalOpen(true); // Open the modal
+    setPrefillCategory(category); // set the selected category to pre-fill
+    setIsModalOpen(true); // open the modal
   };
 
   return (
@@ -68,9 +60,7 @@ export function ListingDropdown() {
           {categoryList.map((category) => (
             <DropdownMenuCheckboxItem
               key={category}
-              checked={selectedCategories.includes(category)}
-              onCheckedChange={() => toggleCategory(category)}
-              onClick={() => openModalWithCategory(category)} // Open modal with selected category
+              onClick={() => openModalWithCategory(category)} // open modal with selected category
             >
               {category}
             </DropdownMenuCheckboxItem>
@@ -78,11 +68,11 @@ export function ListingDropdown() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Pass the modal state and category to the modal component */}
+      {/* pass the modal state and category to the modal component */}
       <CreateListingModal
         open={isModalOpen}
         setOpen={setIsModalOpen}
-        // prefillCategory={prefillCategory}
+        prefillCategory={prefillCategory}
       />
     </>
   );

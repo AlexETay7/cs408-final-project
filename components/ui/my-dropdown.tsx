@@ -16,40 +16,54 @@ import { ChevronDown } from "lucide-react";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
+const categoryList = [
+  "Textbooks",
+  "Dorm Gear",
+  "Furniture",
+  "Electronics",
+  "Clothing",
+  "Bikes & Boards",
+  "Decor",
+  "School Supplies",
+  "Kitchenware",
+  "Games & Media",
+  "Personal Care",
+  "Other",
+];
+
 export function MyDropdown() {
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
-  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
-  const [showPanel, setShowPanel] = React.useState<Checked>(false);
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
+    []
+  );
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
 
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button className="focus-visible:ring-0" variant="outline">
-          <ChevronDown />
+          <ChevronDown className="mr-2" />
           Filter Listings
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Categories</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuCheckboxItem
-          checked={showStatusBar}
-          onCheckedChange={setShowStatusBar}
-        >
-          Status Bar
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showActivityBar}
-          onCheckedChange={setShowActivityBar}
-        >
-          Activity Bar
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showPanel}
-          onCheckedChange={setShowPanel}
-        >
-          Panel
-        </DropdownMenuCheckboxItem>
+        {categoryList.map((category) => (
+          <DropdownMenuCheckboxItem
+            key={category}
+            checked={selectedCategories.includes(category)}
+            onCheckedChange={() => toggleCategory(category)}
+          >
+            {category}
+          </DropdownMenuCheckboxItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
