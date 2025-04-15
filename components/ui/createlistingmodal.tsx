@@ -43,6 +43,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   open: boolean;
@@ -100,34 +101,17 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
     }
   }, [open, prefillCategory, reset]);
 
-  //  const onSubmit = (data: FormData) => {
-  //   const formData = new FormData();
-  //   const currentDate = new Date().toISOString();
-  //   Object.entries(data).forEach(([key, value]) => {
-  //     formData.append(key, value);
-  //   });
-  //   formData.append("postedAt", currentDate);
-  //   if (imageFile) {
-  //     formData.append("image", imageFile);
-  //   }
-
-  //   console.log("wip", {
-  //     ...data,
-  //     prefillCategory,
-  //     imageFile,
-  //   });
-
-  //   setOpen(false);
-  // };
   const onSubmit = (data: FormData) => {
     const formData = new FormData();
     const currentDate = new Date().toISOString();
+    const listingId = uuidv4();
 
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
     formData.append("postedAt", currentDate);
+    formData.append("listingId", listingId);
 
     if (imageFile) {
       formData.append("image", imageFile);
