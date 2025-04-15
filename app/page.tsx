@@ -13,6 +13,7 @@ import {
 import ScrambleHover from "@/fancy/components/text/scramble-hover";
 import Typewriter from "@/fancy/components/text/typewriter";
 import Link from "next/link";
+import ModernButton from "@/components/ui/modernbutton";
 
 export default function Home() {
   const items = [
@@ -79,9 +80,10 @@ export default function Home() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/listings">
-            <Button className="w-full sm:w-auto transition-shadow hover:shadow-[0_0_10px_rgba(37,99,235,0.6)]">
+            {/* <Button className="w-full sm:w-auto transition-shadow hover:shadow-[0_0_10px_rgba(37,99,235,0.6)]">
               Explore Listings
-            </Button>
+            </Button> */}
+            <ModernButton />
           </Link>
         </div>
       </div>
