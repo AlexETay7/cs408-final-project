@@ -58,7 +58,8 @@ const formSchema = z.object({
   description: z.string().min(1),
   key: z.string().min(1),
   category: z.string().min(1),
-  contact: z.string().min(1)
+  contact: z.string().min(1),
+  // postedAt: z.string().min(1)
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -76,7 +77,7 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
       description: "",
       key: "",
       category: prefillCategory || "",
-      contact: ""
+      contact: "",
     },
   });
   
@@ -93,28 +94,67 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
         description: "",
         key: "",
         category: prefillCategory || "",
+        contact: "",
       });
       setImageFile(null); 
     }
   }, [open, prefillCategory, reset]);
 
-   const onSubmit = (data: FormData) => {
+  //  const onSubmit = (data: FormData) => {
+  //   const formData = new FormData();
+  //   const currentDate = new Date().toISOString();
+  //   Object.entries(data).forEach(([key, value]) => {
+  //     formData.append(key, value);
+  //   });
+  //   formData.append("postedAt", currentDate);
+  //   if (imageFile) {
+  //     formData.append("image", imageFile);
+  //   }
+
+  //   console.log("wip", {
+  //     ...data,
+  //     prefillCategory,
+  //     imageFile,
+  //   });
+
+  //   setOpen(false);
+  // };
+  const onSubmit = (data: FormData) => {
     const formData = new FormData();
+    const currentDate = new Date().toISOString();
+    
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
+  
+    formData.append('postedAt', currentDate);
+  
     if (imageFile) {
-      formData.append("image", imageFile);
+      formData.append('image', imageFile);
     }
-
-    console.log("wip", {
-      ...data,
-      prefillCategory,
-      imageFile,
+  
+    // log the contents of FormData
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+  
+    // submit the form data
+    fetch('/your-endpoint', {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('Form submitted successfully');
+      } else {
+        console.error('Failed to submit form');
+      }
+    })
+    .catch(error => {
+      console.error('Error submitting form:', error);
     });
-
-    setOpen(false);
   };
+  
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
