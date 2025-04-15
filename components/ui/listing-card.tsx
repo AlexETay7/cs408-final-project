@@ -39,11 +39,14 @@ export default function ListingCard({
             <CardTitle className="text-lg">{title}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between">
-              <p className="text-gray-700 font-medium">{price}</p>
-              <div className="flex items-center text-gray-500 text-sm">
-                <MapPin className="h-4 w-4 mr-1" />
-                {location}
+            <div className="flex flex-col">
+              <p className="text-blue-400 font-medium mb-1">@{creator}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-gray-700 font-medium">{price}</p>
+                <div className="flex items-center text-gray-500 text-sm">
+                  <MapPin className="h-4 w-4 mr-1" />
+                  {location}
+                </div>
               </div>
             </div>
           </CardContent>

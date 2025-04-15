@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Dialog,
@@ -52,7 +52,7 @@ type Props = {
 
 const formSchema = z.object({
   title: z.string().min(1),
-  price: z.string().min(1),
+  price: z.string().min(2),
   location: z.string().min(1),
   creator: z.string().min(1),
   description: z.string().min(1),
@@ -80,7 +80,7 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
       contact: "",
     },
   });
-  
+
   const { reset } = form;
 
   // reset form whenever modal opens, with the new category
@@ -96,7 +96,7 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
         category: prefillCategory || "",
         contact: "",
       });
-      setImageFile(null); 
+      setImageFile(null);
     }
   }, [open, prefillCategory, reset]);
 
@@ -122,47 +122,50 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
   const onSubmit = (data: FormData) => {
     const formData = new FormData();
     const currentDate = new Date().toISOString();
-    
+
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
-  
-    formData.append('postedAt', currentDate);
-  
+
+    formData.append("postedAt", currentDate);
+
     if (imageFile) {
-      formData.append('image', imageFile);
+      formData.append("image", imageFile);
     }
-  
+
     // log the contents of FormData
     for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
+      console.log(pair[0] + ": " + pair[1]);
     }
-  
+
     // submit the form data
-    fetch('/your-endpoint', {
-      method: 'POST',
+    fetch("/your-endpoint", {
+      method: "POST",
       body: formData,
     })
-    .then(response => {
-      if (response.ok) {
-        console.log('Form submitted successfully');
-      } else {
-        console.error('Failed to submit form');
-      }
-    })
-    .catch(error => {
-      console.error('Error submitting form:', error);
-    });
+      .then((response) => {
+        if (response.ok) {
+          console.log("Form submitted successfully");
+        } else {
+          console.error("Failed to submit form");
+        }
+      })
+      .catch((error) => {
+        console.error("Error submitting form:", error);
+      });
   };
-  
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>  Create New Listing in{" "}
+          <DialogTitle>
+            {" "}
+            Create New Listing in{" "}
             {prefillCategory && (
-              <span className="text-blue-500 font-medium">{prefillCategory}</span>
+              <span className="text-blue-500 font-medium">
+                {prefillCategory}
+              </span>
             )}
           </DialogTitle>
         </DialogHeader>
@@ -189,12 +192,14 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
 
                 useEffect(() => {
                   // ensure price always has the '$' symbol if it's missing
-                  if (price && !price.startsWith('$')) {
-                    setPrice('$' + price);
+                  if (price && !price.startsWith("$")) {
+                    setPrice("$" + price);
                   }
                 }, [price]);
 
-                const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                const handlePriceChange = (
+                  e: React.ChangeEvent<HTMLInputElement>
+                ) => {
                   // remove any non-numeric characters (except decimal and $ symbol)
                   let input = e.target.value.replace(/[^0-9.]/g, "");
 
@@ -248,8 +253,12 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
                         <TooltipTrigger asChild>
                           <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
                         </TooltipTrigger>
-                        <TooltipContent className="bg-white text-black border border-gray-300 shadow-md" side="right">
-                          This is the name that will be publicly shown on your listing.
+                        <TooltipContent
+                          className="bg-white text-black border border-gray-300 shadow-md"
+                          side="right"
+                        >
+                          This is the name that will be publicly shown on your
+                          listing.
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -285,7 +294,12 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea className="focus-visible:ring-0" maxLength={100} rows={4} {...field} />
+                    <Textarea
+                      className="focus-visible:ring-0"
+                      maxLength={100}
+                      rows={4}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -300,7 +314,12 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
                 onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                 className="hidden"
               />
-              <Button variant="outline" type="button" className="w-full" asChild>
+              <Button
+                variant="outline"
+                type="button"
+                className="w-full"
+                asChild
+              >
                 <label
                   htmlFor="image"
                   className="w-full flex items-center justify-center gap-2 cursor-pointer"
@@ -327,8 +346,13 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
                         <TooltipTrigger asChild>
                           <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
                         </TooltipTrigger>
-                        <TooltipContent className="bg-white text-black border border-gray-300 shadow-md" side="right">
-                          This key acts like a password for your listing. Be sure to <strong>save it</strong>, as you'll need it to edit or delete your post later.
+                        <TooltipContent
+                          className="bg-white text-black border border-gray-300 shadow-md"
+                          side="right"
+                        >
+                          This key acts like a password for your listing. Be
+                          sure to <strong>save it</strong>, as you'll need it to
+                          edit or delete your post later.
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -342,7 +366,9 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
             />
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button className="w-full" type="button">Submit Listing</Button>
+                <Button className="w-full" type="button">
+                  Submit Listing
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -353,7 +379,9 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => form.handleSubmit(onSubmit)()}>
+                  <AlertDialogAction
+                    onClick={() => form.handleSubmit(onSubmit)()}
+                  >
                     Confirm
                   </AlertDialogAction>
                 </AlertDialogFooter>
