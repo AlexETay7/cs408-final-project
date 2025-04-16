@@ -6,6 +6,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { format } from "date-fns";
 
 type ListingCardProps = {
   title: string;
@@ -53,8 +54,8 @@ export default function ListingCard({
         </Card>
       </HoverCardTrigger>
 
-      <HoverCardContent className="w-90 bg-gray-500 text-white">
-        <div className="flex justify-between space-x-4">
+      <HoverCardContent className="w-[360px] bg-gray-500 text-white">
+        <div className="flex items-start gap-4">
           <Avatar>
             <AvatarImage src="/home/graduation-hat.png" />
             <AvatarFallback>CC</AvatarFallback>
@@ -63,8 +64,10 @@ export default function ListingCard({
             <h4 className="text-sm font-semibold">@{creator}</h4>
             <p className="text-sm">{description}</p>
             <div className="flex items-center pt-2">
-              <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
-              <span className="text-xs text-white/80">{postedAt}</span>
+              <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+              <span className="text-xs text-white/80">
+                {postedAt ? format(new Date(postedAt), "PPP p") : "Unknown date"}
+              </span>
             </div>
           </div>
         </div>

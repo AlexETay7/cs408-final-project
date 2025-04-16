@@ -101,43 +101,61 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
     }
   }, [open, prefillCategory, reset]);
 
-  const onSubmit = (data: FormData) => {
-    const formData = new FormData();
-    const currentDate = new Date().toISOString();
+  const onSubmit = async (data: FormData) => {
     const listingId = uuidv4();
-
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    formData.append("postedAt", currentDate);
-    formData.append("listingId", listingId);
-
+    const postedAt = new Date().toISOString();
+    let imageUrl = "";
+  
     if (imageFile) {
-      formData.append("image", imageFile);
-    }
-
-    // log the contents of FormData
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
-
-    // submit the form data
-    fetch("/your-endpoint", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Form submitted successfully");
-        } else {
-          console.error("Failed to submit form");
-        }
-      })
-      .catch((error) => {
-        console.error("Error submitting form:", error);
+      const filename = imageFile.name;
+      const contentType = imageFile.type;
+  
+      // construct the S3 key
+      const timestamp = Date.now();
+      const key = `uploads/${timestamp}-${filename}`;
+  
+      // define the public URL for the image 
+      imageUrl = `https://campuscart-listings-images.s3.us-west-2.amazonaws.com/${key}`;
+  
+      // upload the image directly to S3
+      const s3UploadRes = await fetch(imageUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": contentType,
+        },
+        body: imageFile,
       });
+  
+      if (!s3UploadRes.ok) {
+        console.error("Image upload to S3 failed");
+        return;
+      }
+    }
+  
+    // submit the rest of the listing data to /items
+    const payload = {
+      ...data,
+      listingId,
+      postedAt,
+      imageUrl,
+    };
+  
+    const res = await fetch("https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+  
+    if (res.ok) {
+      console.log("Listing created!");
+      // reset form
+    } else {
+      console.error("Failed to submit listing");
+    }
   };
+  
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

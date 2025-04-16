@@ -32,66 +32,41 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
 
-const mockListings = [
-  {
-    title: "Mini Fridge",
-    price: "$40",
-    imageUrl: "campus-cart.png",
-    description: "Perfect for dorm use. Runs quiet. Energy efficient.",
-    creator: "AET720",
-    postedAt: "August 3rd, 5:14 PM",
-    location: "Boise",
-  },
-  {
-    title: "Used Textbooks",
-    price: "$25",
-    imageUrl: "campus-cart.png",
-    description: "Covers intro CS courses. Light notes in margins.",
-    creator: "Jane1Smith",
-    postedAt: "May 3rd, 5:14 PM",
-    location: "Boise",
-  },
-  {
-    title: "Dorm Lamp",
-    price: "$10",
-    imageUrl: "campus-cart.png",
-    description: "Simple and clean. Adjustable neck, warm light.",
-    creator: "Niles81",
-    postedAt: "December 3rd, 5:14 PM",
-    location: "Boise",
-  },
-  {
-    title: "Mini Fridge",
-    price: "$40",
-    imageUrl: "campus-cart.png",
-    description: "Perfect for dorm use. Runs quiet. Energy efficient.",
-    creator: "AET720",
-    postedAt: "August 3rd, 5:14 PM",
-    location: "Boise",
-  },
-  {
-    title: "Used Textbooks",
-    price: "$25",
-    imageUrl: "campus-cart.png",
-    description: "Covers intro CS courses. Light notes in margins.",
-    creator: "Jane1Smith",
-    postedAt: "May 3rd, 5:14 PM",
-    location: "Boise",
-  },
-  {
-    title: "Dorm Lamp",
-    price: "$10",
-    imageUrl: "campus-cart.png",
-    description: "Simple and clean. Adjustable neck, warm light.",
-    creator: "Niles81",
-    postedAt: "December 3rd, 5:14 PM",
-    location: "Boise",
-  },
-];
+type Listing = {
+  title: string;
+  price: string;
+  imageUrl: string;
+  description: string;
+  creator: string;
+  postedAt: string;
+  location: string;
+};
 
 export default function ListingsPage() {
   //   const [searchQuery, setSearchQuery] = useState("");
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const res = await fetch(
+          "https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items"
+        );
+        if (!res.ok) throw new Error("Failed to fetch listings");
+        const data = await res.json();
+        setListings(data);
+      } catch (err) {
+        console.error("Error loading listings:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto mt-16 px-4">
@@ -137,20 +112,26 @@ export default function ListingsPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {mockListings.map((item, index) => (
-          <ListingCard
-            key={index}
-            title={item.title}
-            price={item.price}
-            imageUrl={item.imageUrl}
-            description={item.description}
-            creator={item.creator}
-            postedAt={item.postedAt}
-            location={item.location}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[300px]">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {listings.map((item, index) => (
+            <ListingCard
+              key={index}
+              title={item.title}
+              price={item.price}
+              imageUrl={item.imageUrl}
+              description={item.description}
+              creator={item.creator}
+              postedAt={item.postedAt}
+              location={item.location}
+            />
+          ))}
+        </div>
+      )}
       <Footer></Footer>
       <div className="fixed bottom-4 right-8 z-50 transform hover:scale-110 hover:text-foreground transition-all duration-200">
         <TooltipProvider>
