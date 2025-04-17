@@ -59,7 +59,7 @@ export default function CreateListingPage() {
       <div className="absolute top-4 right-4">
         <Link href="/">
           <Avatar>
-            <AvatarImage src="graduation-hat.png" alt="User Avatar" />
+            <AvatarImage src="/home/graduation-hat.png" alt="User Avatar" />
             <AvatarFallback>CC</AvatarFallback>
           </Avatar>
         </Link>

@@ -11,15 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Archive, Plus, Search } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Archive, RefreshCcw } from "lucide-react";
 import { MyDropdown } from "@/components/ui/my-dropdown";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -49,23 +41,23 @@ export default function ListingsPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        const res = await fetch(
-          "https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items"
-        );
-        if (!res.ok) throw new Error("Failed to fetch listings");
-        const data = await res.json();
-        setListings(data);
-      } catch (err) {
-        console.error("Error loading listings:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchListings = async () => {
+    try {
+      const res = await fetch(
+        "https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items"
+      );
+      if (!res.ok) throw new Error("Failed to fetch listings");
+      const data = await res.json();
+      setListings(data);
+    } catch (err) {
+      console.error("Error loading listings:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchListings();
+  useEffect(() => {
+    fetchListings(); // used on startup
   }, []);
 
   return (
@@ -74,13 +66,12 @@ export default function ListingsPage() {
       <div className="absolute top-4 right-4">
         <Link href="/">
           <Avatar>
-            <AvatarImage src="graduation-hat.png" alt="User Avatar" />
+            <AvatarImage src="/home/graduation-hat.png" alt="User Avatar" />
             <AvatarFallback>CC</AvatarFallback>
           </Avatar>
         </Link>
       </div>
       <div className="flex items-center justify-between flex-wrap gap-4 mb-8">
-        {/* LEFT: Breadcrumb + Search */}
         <div className="flex items-center gap-4 flex-wrap">
           <Breadcrumb>
             <BreadcrumbList>
@@ -107,8 +98,19 @@ export default function ListingsPage() {
         </div>
 
         <div className="flex items-center gap-4 flex-wrap">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => {
+              setLoading(true); // show spinner again
+              fetchListings();
+            }}
+            className="hover:bg-blue-100"
+          >
+            <RefreshCcw className="w-5 h-5" />
+          </Button>
           <MyDropdown />
-          <ListingDropdown />
+          <ListingDropdown onListingCreated={fetchListings} />
         </div>
       </div>
 
@@ -133,7 +135,7 @@ export default function ListingsPage() {
         </div>
       )}
       <Footer></Footer>
-      <div className="fixed bottom-4 right-8 z-50 transform hover:scale-110 hover:text-foreground transition-all duration-200">
+      <div className="fixed bottom-4 right-6 z-50 transform hover:scale-110 hover:text-foreground transition-all duration-200">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>

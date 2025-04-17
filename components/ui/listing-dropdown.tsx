@@ -31,7 +31,11 @@ const categoryList = [
   "Other",
 ];
 
-export function ListingDropdown() {
+type ListingDropdownProps = {
+  onListingCreated?: () => void;
+};
+
+export function ListingDropdown({ onListingCreated }: ListingDropdownProps) {
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
     []
   );
@@ -73,6 +77,7 @@ export function ListingDropdown() {
         open={isModalOpen}
         setOpen={setIsModalOpen}
         prefillCategory={prefillCategory}
+        onCreated={onListingCreated}
       />
     </>
   );

@@ -48,6 +48,7 @@ export default function AboutModal() {
           logic and ensure a reliable user experience. For infrastructure and
           file storage, I leveraged AWS's{" "}
           <span className="font-semibold text-foreground">DynamoDB</span>,
+          <span className="font-semibold text-foreground"> API Gateway</span>,
           <span className="font-semibold text-foreground"> S3</span>, and
           <span className="font-semibold text-foreground"> Lambda</span>,
           powering the backend with scalability and performance in mind.

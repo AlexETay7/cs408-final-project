@@ -49,6 +49,7 @@ type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   prefillCategory: string | null;
+  onCreated?: () => void;
 };
 
 const formSchema = z.object({
@@ -60,12 +61,16 @@ const formSchema = z.object({
   key: z.string().min(1),
   category: z.string().min(1),
   contact: z.string().min(1),
-  // postedAt: z.string().min(1)
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
+export function CreateListingModal({
+  open,
+  setOpen,
+  prefillCategory,
+  onCreated,
+}: Props) {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const form = useForm<FormData>({
@@ -105,18 +110,18 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
     const listingId = uuidv4();
     const postedAt = new Date().toISOString();
     let imageUrl = "";
-  
+
     if (imageFile) {
       const filename = imageFile.name;
       const contentType = imageFile.type;
-  
+
       // construct the S3 key
       const timestamp = Date.now();
       const key = `uploads/${timestamp}-${filename}`;
-  
-      // define the public URL for the image 
+
+      // define the public URL for the image
       imageUrl = `https://campuscart-listings-images.s3.us-west-2.amazonaws.com/${key}`;
-  
+
       // upload the image directly to S3
       const s3UploadRes = await fetch(imageUrl, {
         method: "PUT",
@@ -125,13 +130,13 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
         },
         body: imageFile,
       });
-  
+
       if (!s3UploadRes.ok) {
         console.error("Image upload to S3 failed");
         return;
       }
     }
-  
+
     // submit the rest of the listing data to /items
     const payload = {
       ...data,
@@ -139,23 +144,28 @@ export function CreateListingModal({ open, setOpen, prefillCategory }: Props) {
       postedAt,
       imageUrl,
     };
-  
-    const res = await fetch("https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-  
+
+    const res = await fetch(
+      "https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
     if (res.ok) {
       console.log("Listing created!");
-      // reset form
+      setOpen(false);
+      if (onCreated) {
+        onCreated();
+      } // trigger listings page refresh
     } else {
       console.error("Failed to submit listing");
     }
   };
-  
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

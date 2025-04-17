@@ -16,6 +16,7 @@ type ListingCardProps = {
   postedAt?: string; // optional
   creator: string;
   location: string;
+  disableHoverCard?: boolean; // prop to control hover card behavior
 };
 
 export default function ListingCard({
@@ -26,35 +27,44 @@ export default function ListingCard({
   postedAt,
   creator,
   location,
+  disableHoverCard = false, // default to false if not passed
 }: ListingCardProps) {
+  const card = (
+    <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer bg-white text-black">
+      <div className="w-full h-48 overflow-hidden rounded-lg max-w-[90%] mx-auto">
+        <img
+          src={imageUrl}
+          alt={title}
+          className="w-full h-full object-cover rounded-lg"
+        />
+      </div>
+      <CardHeader>
+        <CardTitle className="text-lg">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col">
+          <p className="text-blue-400 font-medium mb-1">@{creator}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-gray-700 font-medium">{price}</p>
+            <div className="flex items-center text-gray-500 text-sm">
+              <MapPin className="h-4 w-4 mr-1" />
+              {location}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  if (disableHoverCard) {
+    // Return the card without hover card features
+    return card;
+  }
+
   return (
     <HoverCard>
-      <HoverCardTrigger asChild>
-        <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer">
-          <img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-48 object-cover"
-          />
-          <CardHeader>
-            <CardTitle className="text-lg">{title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col">
-              <p className="text-blue-400 font-medium mb-1">@{creator}</p>
-              <div className="flex items-center justify-between">
-                <p className="text-gray-700 font-medium">{price}</p>
-                <div className="flex items-center text-gray-500 text-sm">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  {location}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </HoverCardTrigger>
-
-      <HoverCardContent className="w-[360px] bg-gray-500 text-white">
+      <HoverCardTrigger asChild>{card}</HoverCardTrigger>
+      <HoverCardContent className="w-[360px] bg-gray-50 text-black">
         <div className="flex items-start gap-4">
           <Avatar>
             <AvatarImage src="/home/graduation-hat.png" />
@@ -65,8 +75,10 @@ export default function ListingCard({
             <p className="text-sm">{description}</p>
             <div className="flex items-center pt-2">
               <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
-              <span className="text-xs text-white/80">
-                {postedAt ? format(new Date(postedAt), "PPP p") : "Unknown date"}
+              <span className="text-xs text-black/80">
+                {postedAt
+                  ? format(new Date(postedAt), "PPP p")
+                  : "Unknown date"}
               </span>
             </div>
           </div>
