@@ -116,7 +116,7 @@ export default function MyListingsPage() {
       <div className="absolute top-4 right-4">
         <Link href="/">
           <Avatar>
-            <AvatarImage src="/home/graduation-hat.png" alt="CC" />
+            <AvatarImage src="/graduation-hat.png" alt="CC" />
             <AvatarFallback>CC</AvatarFallback>
           </Avatar>
         </Link>
@@ -148,13 +148,11 @@ export default function MyListingsPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/home">Home</BreadcrumbLink>
+                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/home/listings">
-                    Listings
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="/listings">Listings</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>

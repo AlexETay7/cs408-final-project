@@ -29,7 +29,7 @@ const Footer = () => {
           <div className="py-12 flex flex-col justify-start items-center">
             {/* Logo */}
             <img
-              src="/home/graduation-hat.png"
+              src="/graduation-hat.png"
               alt="CC Logo"
               className="h-8 w-auto"
             />

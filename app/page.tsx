@@ -31,7 +31,7 @@ export default function Home() {
       {/* avatar in top right */}
       <div className="absolute top-4 right-4">
         <Avatar>
-          <AvatarImage src="/home/graduation-hat.png" alt="User Avatar" />
+          <AvatarImage src="/graduation-hat.png" alt="User Avatar" />
           <AvatarFallback>CC</AvatarFallback>
         </Avatar>
       </div>

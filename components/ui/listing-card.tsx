@@ -33,7 +33,7 @@ export default function ListingCard({
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer bg-white text-black">
       <div className="w-full h-48 overflow-hidden rounded-lg max-w-[90%] mx-auto">
         <img
-          src={imageUrl && imageUrl !== "" ? imageUrl : "/home/campus-cart.png"} // if no imageUrl, use default
+          src={imageUrl && imageUrl !== "" ? imageUrl : "/campus-cart.png"} // if no imageUrl, use default
           alt={title}
           className="w-full h-full object-cover rounded-lg"
         />
@@ -67,7 +67,7 @@ export default function ListingCard({
       <HoverCardContent className="w-[360px] bg-gray-50 text-black">
         <div className="flex items-start gap-4">
           <Avatar>
-            <AvatarImage src="/home/graduation-hat.png" />
+            <AvatarImage src="/graduation-hat.png" />
             <AvatarFallback>CC</AvatarFallback>
           </Avatar>
           <div className="space-y-1">
