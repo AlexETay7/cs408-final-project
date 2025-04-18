@@ -31,17 +31,22 @@ const categoryList = [
   "Other",
 ];
 
-export function MyDropdown() {
+type MyDropdownProps = {
+  onCategoryChange: (selectedCategories: string[]) => void; // pass the updated categories to parent
+};
+
+export function MyDropdown({ onCategoryChange }: MyDropdownProps) {
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
     []
   );
 
   const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+    const newSelectedCategories = selectedCategories.includes(category)
+      ? selectedCategories.filter((c) => c !== category)
+      : [...selectedCategories, category];
+
+    setSelectedCategories(newSelectedCategories);
+    onCategoryChange(newSelectedCategories); // notify parent component of the updated categories
   };
 
   return (

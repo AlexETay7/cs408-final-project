@@ -33,7 +33,7 @@ export default function ListingCard({
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer bg-white text-black">
       <div className="w-full h-48 overflow-hidden rounded-lg max-w-[90%] mx-auto">
         <img
-          src={imageUrl}
+          src={imageUrl && imageUrl !== "" ? imageUrl : "/home/campus-cart.png"} // if no imageUrl, use default
           alt={title}
           className="w-full h-full object-cover rounded-lg"
         />

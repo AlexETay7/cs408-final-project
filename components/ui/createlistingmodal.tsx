@@ -120,7 +120,7 @@ export function CreateListingModal({
       const key = `uploads/${timestamp}-${filename}`;
 
       // define the public URL for the image
-      imageUrl = `https://campuscart-listings-images.s3.us-west-2.amazonaws.com/${key}`;
+      imageUrl = `${process.env.NEXT_PUBLIC_S3_URL}/${key}`;
 
       // upload the image directly to S3
       const s3UploadRes = await fetch(imageUrl, {

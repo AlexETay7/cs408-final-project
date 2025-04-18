@@ -14,9 +14,8 @@ import {
 import { Archive, RefreshCcw } from "lucide-react";
 import { MyDropdown } from "@/components/ui/my-dropdown";
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
 import Footer from "@/components/ui/footer";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Spinner } from "@/components/ui/spinner";
 import { ListingDropdown } from "@/components/ui/listing-dropdown";
 import {
   Tooltip,
@@ -24,7 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Spinner } from "@/components/ui/spinner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Listing = {
   title: string;
@@ -34,18 +33,18 @@ type Listing = {
   creator: string;
   postedAt: string;
   location: string;
+  category: string;
 };
 
 export default function ListingsPage() {
-  //   const [searchQuery, setSearchQuery] = useState("");
   const [listings, setListings] = useState<Listing[]>([]);
+  const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const fetchListings = async () => {
     try {
-      const res = await fetch(
-        "https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items"
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/items`);
       if (!res.ok) throw new Error("Failed to fetch listings");
       const data = await res.json();
       setListings(data);
@@ -57,12 +56,26 @@ export default function ListingsPage() {
   };
 
   useEffect(() => {
-    fetchListings(); // used on startup
+    fetchListings();
   }, []);
+
+  // filter listings based on selected categories
+  const filterListings = (categories: string[]) => {
+    if (categories.length === 0) {
+      setFilteredListings(listings); // no filter applied, show all listings
+    } else {
+      setFilteredListings(
+        listings.filter((listing) => categories.includes(listing.category))
+      );
+    }
+  };
+
+  useEffect(() => {
+    filterListings(selectedCategories); // filter listings whenever categories change
+  }, [selectedCategories, listings]);
 
   return (
     <div className="max-w-6xl mx-auto mt-16 px-4">
-      {/* logo */}
       <div className="absolute top-4 right-4">
         <Link href="/">
           <Avatar>
@@ -84,17 +97,6 @@ export default function ListingsPage() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-
-          {/* <Input
-            type="text"
-            placeholder="Search listings..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="sm:w-64"
-          />
-          <Button type="submit">
-            <Search />
-          </Button> */}
         </div>
 
         <div className="flex items-center gap-4 flex-wrap">
@@ -109,7 +111,7 @@ export default function ListingsPage() {
           >
             <RefreshCcw className="w-5 h-5" />
           </Button>
-          <MyDropdown />
+          <MyDropdown onCategoryChange={setSelectedCategories} />
           <ListingDropdown onListingCreated={fetchListings} />
         </div>
       </div>
@@ -120,7 +122,7 @@ export default function ListingsPage() {
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {listings.map((item, index) => (
+          {filteredListings.map((item, index) => (
             <ListingCard
               key={index}
               title={item.title}
@@ -134,25 +136,25 @@ export default function ListingsPage() {
           ))}
         </div>
       )}
-      <Footer></Footer>
-      <div className="fixed bottom-4 right-6 z-50 transform hover:scale-110 hover:text-foreground transition-all duration-200">
+      <Footer />
+      <div className="fixed bottom-6 right-6 z-50">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/my-listings">
                 <Button
                   size="icon"
-                  className="bg-blue-400 text-white hover:bg-blue-500 h-14 w-14 rounded-full"
+                  className="bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 ease-in-out h-16 w-16 rounded-full flex items-center justify-center"
                 >
-                  <Archive />
+                  <Archive className="w-6 h-6" />
                 </Button>
               </Link>
             </TooltipTrigger>
             <TooltipContent
               side="left"
-              className="bg-white text-black border border-gray-300 shadow-md"
+              className="bg-gray-900 text-white p-2 rounded-md shadow-xl"
             >
-              My Listings
+              <span className="font-semibold">My Listings</span>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

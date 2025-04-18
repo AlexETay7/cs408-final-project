@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 type Listing = {
+  listingId: string;
   title: string;
   price: string;
   imageUrl: string;
@@ -56,7 +57,7 @@ export default function MyListingsPage() {
     setLoading(true); // set loading to true
     try {
       const response = await fetch(
-        `https://mihkhx9i46.execute-api.us-west-2.amazonaws.com/Prod/items/by-key?key=${key}`
+        `${process.env.NEXT_PUBLIC_API_URL}/items/by-key?key=${key}`
       );
       if (!response.ok) throw new Error("Failed to fetch listings");
       const data = await response.json();
@@ -85,8 +86,29 @@ export default function MyListingsPage() {
     throw new Error("Function not implemented.");
   }
 
-  function handleDelete(item: Listing): void {
-    throw new Error("Function not implemented.");
+  async function handleDelete(item: Listing) {
+    if (!item.listingId) {
+      console.error("Listing ID is missing.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/items/${item.listingId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete listing");
+      }
+
+      // remove the listing from state
+      setListings((prev) => prev.filter((l) => l.listingId !== item.listingId));
+    } catch (err) {
+      console.error("Error deleting listing:", err);
+    }
   }
 
   return (
@@ -162,10 +184,8 @@ export default function MyListingsPage() {
                       disableHoverCard
                     />
 
-                    {/* gray overlay on hover */}
                     <div className="absolute inset-0 bg-gray-200 opacity-0 group-hover:opacity-60 transition-opacity duration-200 pointer-events-none rounded-xl z-10" />
 
-                    {/* icons on hover */}
                     <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
                       <button
                         className="p-2 rounded-full bg-yellow-400 text-white shadow hover:bg-yellow-500"
@@ -205,7 +225,29 @@ export default function MyListingsPage() {
                 ))}
               </div>
             ) : (
-              <p>No listings found for the provided key.</p>
+              <div className="flex flex-col items-center justify-center py-20 text-center text-muted-foreground space-y-6">
+                <div className="text-6xl">📭</div>
+                <h2 className="text-2xl font-semibold">No Listings Found</h2>
+                <p>
+                  We couldn't find any listings for your key. Try again or
+                  create a new one!
+                </p>
+                <div className="flex gap-4 pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      // this resets the state so the dialog reappears
+                      setIsKeyEntered(false);
+                      setKey("");
+                    }}
+                  >
+                    Try Again
+                  </Button>
+                  <Link href="/listings">
+                    <Button>Create a New Post</Button>
+                  </Link>
+                </div>
+              </div>
             )}
             <Footer />
           </div>
