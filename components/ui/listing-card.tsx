@@ -64,7 +64,7 @@ export default function ListingCard({
   return (
     <HoverCard>
       <HoverCardTrigger asChild>{card}</HoverCardTrigger>
-      <HoverCardContent className="w-[360px] bg-gray-50 text-black">
+      <HoverCardContent className="w-100 bg-gray-50 text-black">
         <div className="flex items-start gap-4">
           <Avatar>
             <AvatarImage src="/graduation-hat.png" />
