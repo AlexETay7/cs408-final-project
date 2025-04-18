@@ -75,7 +75,7 @@ export default function ListingsPage() {
   }, [selectedCategories, listings]);
 
   return (
-    <div className="max-w-6xl mx-auto mt-16 px-4">
+    <div className="max-w-7xl mx-auto mt-16 px-4">
       <div className="absolute top-4 right-4">
         <Link href="/">
           <Avatar>
@@ -120,6 +120,14 @@ export default function ListingsPage() {
         <div className="flex justify-center items-center min-h-[300px]">
           <Spinner />
         </div>
+      ) : filteredListings.length === 0 ? (
+        <div className="flex flex-col items-center justify-center text-center min-h-[300px]">
+          <div className="text-6xl mb-4">🔍</div>
+          <h2 className="text-xl font-semibold">Nothing here... yet!</h2>
+          <p className="text-gray-500 max-w-md mt-2">
+            There is peace in emptiness... but no listings.
+          </p>
+        </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredListings.map((item, index) => (
@@ -136,6 +144,7 @@ export default function ListingsPage() {
           ))}
         </div>
       )}
+
       <Footer />
       <div className="fixed bottom-6 right-6 z-50">
         <TooltipProvider>

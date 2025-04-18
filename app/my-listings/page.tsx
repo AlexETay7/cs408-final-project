@@ -112,7 +112,7 @@ export default function MyListingsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto mt-16 px-4">
+    <div className="max-w-7xl mx-auto mt-16 px-4">
       <div className="absolute top-4 right-4">
         <Link href="/">
           <Avatar>
