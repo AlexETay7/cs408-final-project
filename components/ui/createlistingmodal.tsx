@@ -71,6 +71,8 @@ export function CreateListingModal({
   prefillCategory,
   onCreated,
 }: Props) {
+  // Set up component-level state for the price field.
+  const [price, setPrice] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const form = useForm<FormData>({
@@ -89,7 +91,7 @@ export function CreateListingModal({
 
   const { reset } = form;
 
-  // reset form whenever modal opens, with the new category
+  // Reset form values when the modal opens
   useEffect(() => {
     if (open) {
       reset({
@@ -103,8 +105,17 @@ export function CreateListingModal({
         contact: "",
       });
       setImageFile(null);
+      // Clear the price state when resetting
+      setPrice("");
     }
   }, [open, prefillCategory, reset]);
+
+  // Ensure the price always starts with '$'
+  useEffect(() => {
+    if (price && !price.startsWith("$")) {
+      setPrice("$" + price);
+    }
+  }, [price]);
 
   const onSubmit = async (data: FormData) => {
     const listingId = uuidv4();
@@ -161,10 +172,25 @@ export function CreateListingModal({
       setOpen(false);
       if (onCreated) {
         onCreated();
-      } // trigger listings page refresh
+      }
     } else {
       console.error("Failed to submit listing");
     }
+  };
+
+  // Handler for changes in the price input field.
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove any non-numeric characters (except decimal)
+    let input = e.target.value.replace(/[^0-9.]/g, "");
+
+    // If there's a value, prepend the '$'
+    if (input) {
+      input = "$" + input;
+    }
+
+    setPrice(input);
+    // Update the form state manually using the "setValue" method (or call field.onChange in the FormField below)
+    form.setValue("price", input);
   };
 
   return (
@@ -172,7 +198,6 @@ export function CreateListingModal({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {" "}
             Create New Listing in{" "}
             {prefillCategory && (
               <span className="text-blue-500 font-medium">
@@ -196,50 +221,27 @@ export function CreateListingModal({
                 </FormItem>
               )}
             />
+
+            {/* The price field now uses the component-level state */}
             <FormField
               control={form.control}
               name="price"
-              render={({ field }) => {
-                const [price, setPrice] = useState(field.value);
-
-                useEffect(() => {
-                  // ensure price always has the '$' symbol if it's missing
-                  if (price && !price.startsWith("$")) {
-                    setPrice("$" + price);
-                  }
-                }, [price]);
-
-                const handlePriceChange = (
-                  e: React.ChangeEvent<HTMLInputElement>
-                ) => {
-                  // remove any non-numeric characters (except decimal and $ symbol)
-                  let input = e.target.value.replace(/[^0-9.]/g, "");
-
-                  // set the value to the state with '$' prepended if it's not empty
-                  if (input) {
-                    input = "$" + input;
-                  }
-
-                  setPrice(input);
-                  field.onChange(input); // update form state
-                };
-
-                return (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="focus-visible:ring-0"
-                        placeholder="$100"
-                        value={price}
-                        onChange={handlePriceChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+              render={() => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="focus-visible:ring-0"
+                      placeholder="$100"
+                      value={price}
+                      onChange={handlePriceChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
+
             <FormField
               control={form.control}
               name="location"
@@ -253,6 +255,7 @@ export function CreateListingModal({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="creator"
@@ -282,6 +285,7 @@ export function CreateListingModal({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="contact"
@@ -299,6 +303,7 @@ export function CreateListingModal({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="description"
@@ -317,6 +322,7 @@ export function CreateListingModal({
                 </FormItem>
               )}
             />
+
             <div className="flex flex-col space-y-2">
               <Label htmlFor="image">Image Upload</Label>
               <input
@@ -346,6 +352,7 @@ export function CreateListingModal({
                 </p>
               )}
             </div>
+
             <FormField
               control={form.control}
               name="key"
@@ -376,6 +383,7 @@ export function CreateListingModal({
                 </FormItem>
               )}
             />
+
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button className="w-full" type="button">
